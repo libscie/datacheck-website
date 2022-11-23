@@ -13,12 +13,73 @@ import ChromeLogo from "./ChromeLogo";
 import FirefoxLogo from "./FirefoxLogo";
 import SafariLogo from "./SafariLogo";
 import ResultsModal from "./ResultsModal";
-
+import Faq from "./Faq";
+import GithubLogo from "./GithubLogo";
 
 const navigation = [
   {
     name: "About",
-    component: <About name="About" title="About the project" />,
+    component: (
+      <About
+        name="About"
+        title="About the project"
+        content={
+          <>
+            <div className="my-2">
+              <h2>Research</h2>
+              <p className="text-sm text-gray-500">
+                <a
+                  href="https://metaresearch.nl"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Meta-Research Center
+                </a>{" "}
+                (Tilburg University; the Netherlands).
+                <ul className="ml-2 my-2">
+                  <li>Prof. dr. Jelte Wicherts</li>
+                  <li>Dr. Richard Klein</li>
+                </ul>
+              </p>
+            </div>
+            <div className="my-2">
+              <h2>Funding</h2>
+              <p className="text-sm text-gray-500">
+                Open Science Fund grant from the Dutch Research Council{" "}
+                <a
+                  href="https://www.nwo.nl/en/projects/203001155"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  (NWO 203.001.155)
+                </a>
+              </p>
+            </div>
+            <div className="my-2">
+              <h2>Engineering</h2>
+              <span className="text-sm text-gray-500">
+                <p>Open source software engineered and hosted by:</p>
+                <a href="https://libscie.org" target="_blank" rel="noreferrer">
+                  <ul className="ml-2 my-2">
+                    <li>Liberate Science GmbH</li>
+                    <li>Ebertystraße 44</li>
+                    <li>10249 Berlin (Germany)</li>
+                    <li>DE326772207</li>
+                  </ul>
+                </a>
+                <a
+                  href="https://github.com/libscie/datacheck-website"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  View the source on GitHub.
+                </a>
+              </span>
+            </div>
+          </>
+        }
+      />
+    ),
   },
   {
     name: "Disclaimer",
@@ -32,6 +93,12 @@ const navigation = [
               aria-hidden="true"
             />
           </div>
+        }
+        content={
+          <p className="text-sm text-gray-500">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
+            amet labore.
+          </p>
         }
         title="Usage disclaimer"
       />
@@ -51,24 +118,19 @@ const navigation = [
           </div>
         }
         title="Need to do more scanning?"
+        content={
+          <p className="text-sm text-gray-500">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
+            amet labore.
+          </p>
+        }
       />
     ),
   },
   {
     name: "FAQ",
     component: (
-      <About
-        name="FAQ"
-        icon={
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-            <ArchiveBoxIcon
-              className="h-6 w-6 text-green-600"
-              aria-hidden="true"
-            />
-          </div>
-        }
-        title="Need to do more scanning?"
-      />
+      <About name="FAQ" content={<Faq />} title="Frequently asked questions" />
     ),
   },
 ];
@@ -108,7 +170,7 @@ export default function Example() {
       phoneNr: false,
     },
     geographical: {
-      latitudeLongitude: false
+      latitudeLongitude: false,
     },
     direct: {
       gender: false,
@@ -117,11 +179,10 @@ export default function Example() {
       creditcard: false,
       iban: false,
       mturk: false,
-    }
-  })
+    },
+  });
 
-  const regex = new RegExp('Chrome|Edge');
-
+  const regex = new RegExp("Chrome|Edge");
 
   useEffect(() => {
     setUA(window.navigator.userAgent.toString());
@@ -180,6 +241,13 @@ export default function Example() {
               {navigation.map((item) => (
                 <>{item.component}</>
               ))}
+              <a
+                href="https://github.com/libscie/datacheck-website"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <GithubLogo styling="w-8" />
+              </a>
             </div>
           </nav>
           <Dialog as="div" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -205,6 +273,13 @@ export default function Example() {
                         {item.component}
                       </div>
                     ))}
+                    <a
+                      href="https://github.com/libscie/datacheck-website"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <GithubLogo styling="w-8" />
+                    </a>{" "}
                   </div>
                 </div>
               </div>
@@ -237,7 +312,7 @@ export default function Example() {
                 <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
                   <a href="#">
                     1 in 20 open datasets contain privacy violations.
-                    {regex.test(UA.toString()) ? "yes" :"no"}
+                    {regex.test(UA.toString()) ? "yes" : "no"}
                   </a>
                 </p>
                 <div className="mt-8 flex gap-x-4 sm:justify-center">
@@ -250,17 +325,19 @@ export default function Example() {
                   >
                     Check a CSV
                   </button>
-                  {toScan && <ResultsModal
-        icon={
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-            <ExclamationTriangleIcon
-              className="h-6 w-6 text-green-600"
-              aria-hidden="true"
-            />
-          </div>
-        }
-        title="Usage disclaimer"
-      />}
+                  {toScan && (
+                    <ResultsModal
+                      icon={
+                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                          <ExclamationTriangleIcon
+                            className="h-6 w-6 text-green-600"
+                            aria-hidden="true"
+                          />
+                        </div>
+                      }
+                      title="Usage disclaimer"
+                    />
+                  )}
                 </div>
                 <p className="mt-6 text-sm leading-8 text-gray-600 sm:text-center">
                   Works on

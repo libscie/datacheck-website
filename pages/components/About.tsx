@@ -4,10 +4,12 @@ import { Dialog, Transition } from "@headlessui/react";
 export default function Modal({
   name,
   icon,
+  content,
   title,
 }: {
   name: String;
   icon?: React.ReactElement;
+  content: React.ReactElement;
   title: String;
 }) {
   const [open, setOpen] = useState(false);
@@ -47,7 +49,7 @@ export default function Modal({
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-6">
                   <div>
                     {icon && icon}
                     <div className="mt-3 text-center sm:mt-5">
@@ -57,12 +59,7 @@ export default function Modal({
                       >
                         {title}
                       </Dialog.Title>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Consequatur amet labore.
-                        </p>
-                      </div>
+                      <div className="mt-2 text-left">{content}</div>
                     </div>
                   </div>
                   <div className="mt-5 sm:mt-6">

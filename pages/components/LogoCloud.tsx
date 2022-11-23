@@ -22,7 +22,7 @@ export default function LogoCloud() {
             </div>
             <div className="mt-4 flex flex-shrink-0 flex-grow justify-center lg:ml-4 lg:flex-grow-0 z-10">
               <a
-                href="https://www.nwo.nl/en/researchprogrammes/open-science/open-science-fund/open-science-fund-2021-awarded-grants"
+                href="https://www.nwo.nl/en/projects/203001155"
                 target="_blank"
                 rel="noreferrer"
               >
