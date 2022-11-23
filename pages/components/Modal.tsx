@@ -1,6 +1,6 @@
-import { Dialog, Transition } from "@headlessui/react"
-import React, { Fragment } from "react"
-import PropTypes from "prop-types"
+import { Dialog, Transition } from "@headlessui/react";
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 
 export const Modal = ({
   isOpen,
@@ -9,7 +9,7 @@ export const Modal = ({
   body,
   onSubmit,
   onCancel = () => {
-    null
+    null;
   },
   primaryAction = "Ok",
   primaryButtonClass,
@@ -38,7 +38,10 @@ export const Modal = ({
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
-            <span className="inline-block h-screen align-middle" aria-hidden="true">
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
               &#8203;
             </span>
             <Transition.Child
@@ -65,8 +68,8 @@ export const Modal = ({
                           `bg-emerald-50 text-emerald-700 hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-0 dark:border dark:border-gray-600 dark:bg-gray-800 dark:text-emerald-500 dark:hover:border-gray-400 dark:hover:bg-gray-700`
                     }`}
                     onClick={async () => {
-                      onSubmit()
-                      setIsOpen(false)
+                      onSubmit();
+                      setIsOpen(false);
                     }}
                   >
                     {primaryAction}
@@ -80,8 +83,8 @@ export const Modal = ({
                           `bg-indigo-100 text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0 dark:border dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-gray-400 dark:hover:bg-gray-700`
                     }`}
                     onClick={() => {
-                      onCancel()
-                      setIsOpen(false)
+                      onCancel();
+                      setIsOpen(false);
                     }}
                   >
                     {secondaryAction}
@@ -93,8 +96,8 @@ export const Modal = ({
         </Dialog>
       </Transition>
     </>
-  )
-}
+  );
+};
 
 Modal.propTypes = {
   isOpen: PropTypes.bool,
@@ -107,4 +110,4 @@ Modal.propTypes = {
   primaryButtonClass: PropTypes.string,
   secondaryAction: PropTypes.string,
   secondaryButtonClass: PropTypes.string,
-}
+};

@@ -1,49 +1,85 @@
 /* This example requires Tailwind CSS v3.0+ */
-import { useEffect, useState } from 'react'
-import { Dialog } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import About from './About'
-import { InformationCircleIcon, ExclamationTriangleIcon, ArchiveBoxIcon } from '@heroicons/react/24/outline'
+import { useEffect, useState } from "react";
+import { Dialog } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import About from "./About";
+import {
+  InformationCircleIcon,
+  ExclamationTriangleIcon,
+  ArchiveBoxIcon,
+} from "@heroicons/react/24/outline";
 
 const navigation = [
-  { name: 'About', component: <About name="About" title="About the project" /> },
-  { name: 'Disclaimer', component: <About name="Disclaimer" icon={ <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-  <ExclamationTriangleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-</div>} title="Usage disclaimer" /> },
-  { name: 'R package', component: <About name="R Package" icon={ <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-  <ArchiveBoxIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-</div>} title="Need to do more scanning?" /> },
-]
-
-async function button () {
-  try {
-  let [fileHandle] = await window.showOpenFilePicker({
-    types: [
-      {
-        description: 'Data',
-        accept: {
-          'text/csv': ['.csv']
+  {
+    name: "About",
+    component: <About name="About" title="About the project" />,
+  },
+  {
+    name: "Disclaimer",
+    component: (
+      <About
+        name="Disclaimer"
+        icon={
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+            <ExclamationTriangleIcon
+              className="h-6 w-6 text-green-600"
+              aria-hidden="true"
+            />
+          </div>
         }
-      },
-    ],
-    excludeAcceptAllOption: true,
-    multiple: false
-  })
-  let fileData = await fileHandle.getFile()
-  let text = await fileData.text()
-  console.log(text)
-} catch (e) {
-  console.log(e)
-}
+        title="Usage disclaimer"
+      />
+    ),
+  },
+  {
+    name: "R package",
+    component: (
+      <About
+        name="R Package"
+        icon={
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+            <ArchiveBoxIcon
+              className="h-6 w-6 text-green-600"
+              aria-hidden="true"
+            />
+          </div>
+        }
+        title="Need to do more scanning?"
+      />
+    ),
+  },
+];
+
+async function button() {
+  try {
+    let [fileHandle] = await window.showOpenFilePicker({
+      types: [
+        {
+          description: "Data",
+          accept: {
+            "text/csv": [".csv"],
+          },
+        },
+      ],
+      excludeAcceptAllOption: true,
+      multiple: false,
+    });
+    let fileData = await fileHandle.getFile();
+    let text = await fileData.text();
+    return text;
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 export default function Example() {
-  const [windowState, setWindowState] = useState(null)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [toScan, setToScan] = useState(undefined);
+  const [UA, setUA] = useState("");
 
   useEffect(() => {
-    console.log(window)
-  })
+    setUA(window.navigator.userAgent.toString());
+  }, []);
 
   return (
     <div className="isolate bg-white">
@@ -76,8 +112,14 @@ export default function Example() {
       </div>
       <div className="px-6 pt-6 lg:px-8">
         <div>
-          <nav className="flex h-9 items-center justify-between" aria-label="Global">
-            <div className="flex lg:min-w-0 lg:flex-1" aria-label="Global"></div>
+          <nav
+            className="flex h-9 items-center justify-between"
+            aria-label="Global"
+          >
+            <div
+              className="flex lg:min-w-0 lg:flex-1"
+              aria-label="Global"
+            ></div>
             <div className="flex lg:hidden">
               <button
                 type="button"
@@ -90,13 +132,9 @@ export default function Example() {
             </div>
             <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-center lg:gap-x-12">
               {navigation.map((item) => (
-                <>
-                {item.component}
-               
-                </>
+                <>{item.component}</>
               ))}
             </div>
-            
           </nav>
           <Dialog as="div" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
             <Dialog.Panel className="fixed inset-0 z-10 overflow-y-auto bg-white px-6 py-6 lg:hidden">
@@ -117,12 +155,11 @@ export default function Example() {
                 <div className="-my-6 divide-y divide-gray-500/10">
                   <div className="space-y-2 py-6 block">
                     {navigation.map((item) => (
-                       <div className='block' key={`item-${item.name}`}>
-                       {item.component}
-                       </div>
+                      <div className="block" key={`item-${item.name}`}>
+                        {item.component}
+                      </div>
                     ))}
                   </div>
-                 
                 </div>
               </div>
             </Dialog.Panel>
@@ -136,8 +173,11 @@ export default function Example() {
               <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                 <div className="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                   <span className="text-gray-600">
-                    Join our launch on November 28th.{' '}
-                    <a href="https://www.youtube.com/watch?v=i5Pa3Sx3n14" className="font-semibold text-indigo-600">
+                    Join our launch on November 28th.{" "}
+                    <a
+                      href="https://www.youtube.com/watch?v=i5Pa3Sx3n14"
+                      className="font-semibold text-indigo-600"
+                    >
                       <span className="absolute inset-0" aria-hidden="true" />
                       View on YouTube <span aria-hidden="true">&rarr;</span>
                     </a>
@@ -146,26 +186,30 @@ export default function Example() {
               </div>
               <div>
                 <h1 className="text-4xl text-indigo-900 font-bold tracking-tight sm:text-center sm:text-6xl">
-                  Prevent sharing privacy violations. 
+                  Prevent sharing privacy violations.
                 </h1>
                 <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
-                  <a href="#">1 in 20 open datasets contain privacy violations.</a>
+                  <a href="#">
+                    1 in 20 open datasets contain privacy violations.
+                  </a>
                 </p>
                 <div className="mt-8 flex gap-x-4 sm:justify-center">
                   <button
                     className="inline-block rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
-                    onClick={() => {
-                      try {
-                        button()
-                      } catch (e) {
-                        console.log(e)
-                      }
-                    }} 
+                    onClick={async () => {
+                      setToScan(await button());
+                    }}
                   >
                     Check a CSV
                   </button>
+                  {toScan && "insert results mdoal here"}
                 </div>
+                <p className="mt-6 text-sm leading-8 text-gray-600 sm:text-center">
+                  Works on
+                  <div>1</div>
+                </p>
               </div>
+
               <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
                 <svg
                   className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
@@ -198,5 +242,5 @@ export default function Example() {
         </div>
       </main>
     </div>
-  )
+  );
 }
