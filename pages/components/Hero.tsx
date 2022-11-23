@@ -8,6 +8,12 @@ import {
   ExclamationTriangleIcon,
   ArchiveBoxIcon,
 } from "@heroicons/react/24/outline";
+import EdgeLogo from "./EdgeLogo";
+import ChromeLogo from "./ChromeLogo";
+import FirefoxLogo from "./FirefoxLogo";
+import SafariLogo from "./SafariLogo";
+import ResultsModal from "./ResultsModal";
+
 
 const navigation = [
   {
@@ -48,6 +54,23 @@ const navigation = [
       />
     ),
   },
+  {
+    name: "FAQ",
+    component: (
+      <About
+        name="FAQ"
+        icon={
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+            <ArchiveBoxIcon
+              className="h-6 w-6 text-green-600"
+              aria-hidden="true"
+            />
+          </div>
+        }
+        title="Need to do more scanning?"
+      />
+    ),
+  },
 ];
 
 async function button() {
@@ -76,6 +99,29 @@ export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toScan, setToScan] = useState(undefined);
   const [UA, setUA] = useState("");
+  const [results, setResults] = useState({
+    technical: {
+      email: false,
+      ipv4: false,
+      ipv6: false,
+      macAddress: false,
+      phoneNr: false,
+    },
+    geographical: {
+      latitudeLongitude: false
+    },
+    direct: {
+      gender: false,
+      birthday: false,
+      ssn: false,
+      creditcard: false,
+      iban: false,
+      mturk: false,
+    }
+  })
+
+  const regex = new RegExp('Chrome|Edge');
+
 
   useEffect(() => {
     setUA(window.navigator.userAgent.toString());
@@ -191,22 +237,41 @@ export default function Example() {
                 <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
                   <a href="#">
                     1 in 20 open datasets contain privacy violations.
+                    {regex.test(UA.toString()) ? "yes" :"no"}
                   </a>
                 </p>
                 <div className="mt-8 flex gap-x-4 sm:justify-center">
                   <button
-                    className="inline-block rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
+                    className="inline-block rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700 disabled:opacity-50"
                     onClick={async () => {
                       setToScan(await button());
                     }}
+                    disabled={!regex.test(UA.toString())}
                   >
                     Check a CSV
                   </button>
-                  {toScan && "insert results mdoal here"}
+                  {toScan && <ResultsModal
+        icon={
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+            <ExclamationTriangleIcon
+              className="h-6 w-6 text-green-600"
+              aria-hidden="true"
+            />
+          </div>
+        }
+        title="Usage disclaimer"
+      />}
                 </div>
                 <p className="mt-6 text-sm leading-8 text-gray-600 sm:text-center">
                   Works on
-                  <div>1</div>
+                  <span className="flex">
+                    <span className="flex-grow"></span>
+                    <EdgeLogo styling="max-w-8 max-h-8 mx-1 my-2" />
+                    <ChromeLogo styling="max-w-8 max-h-8 mx-1 my-2 " />
+                    <FirefoxLogo styling="max-w-8 max-h-8 mx-1 my-2  opacity-25" />
+                    <SafariLogo styling="max-w-8 max-h-8 mx-1 my-2  opacity-25" />
+                    <span className="flex-grow"></span>
+                  </span>
                 </p>
               </div>
 
