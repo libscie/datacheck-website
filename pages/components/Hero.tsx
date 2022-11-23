@@ -1,17 +1,49 @@
 /* This example requires Tailwind CSS v3.0+ */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import About from './About'
+import { InformationCircleIcon, ExclamationTriangleIcon, ArchiveBoxIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
+  { name: 'About', component: <About name="About" title="About the project" /> },
+  { name: 'Disclaimer', component: <About name="Disclaimer" icon={ <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+  <ExclamationTriangleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+</div>} title="Usage disclaimer" /> },
+  { name: 'R package', component: <About name="R Package" icon={ <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+  <ArchiveBoxIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+</div>} title="Need to do more scanning?" /> },
 ]
 
+async function button () {
+  try {
+  let [fileHandle] = await window.showOpenFilePicker({
+    types: [
+      {
+        description: 'Data',
+        accept: {
+          'text/csv': ['.csv']
+        }
+      },
+    ],
+    excludeAcceptAllOption: true,
+    multiple: false
+  })
+  let fileData = await fileHandle.getFile()
+  let text = await fileData.text()
+  console.log(text)
+} catch (e) {
+  console.log(e)
+}
+}
+
 export default function Example() {
+  const [windowState, setWindowState] = useState(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  useEffect(() => {
+    console.log(window)
+  })
 
   return (
     <div className="isolate bg-white">
@@ -36,8 +68,8 @@ export default function Example() {
               y2="474.645"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stopColor="#9089FC" />
-              <stop offset={1} stopColor="#FF80B5" />
+              <stop stopColor="#b38130" />
+              <stop offset={1} stopColor="#574cfa" />
             </linearGradient>
           </defs>
         </svg>
@@ -45,12 +77,7 @@ export default function Example() {
       <div className="px-6 pt-6 lg:px-8">
         <div>
           <nav className="flex h-9 items-center justify-between" aria-label="Global">
-            <div className="flex lg:min-w-0 lg:flex-1" aria-label="Global">
-              <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
-                <img className="h-8" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
-              </a>
-            </div>
+            <div className="flex lg:min-w-0 lg:flex-1" aria-label="Global"></div>
             <div className="flex lg:hidden">
               <button
                 type="button"
@@ -63,9 +90,10 @@ export default function Example() {
             </div>
             <div className="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-center lg:gap-x-12">
               {navigation.map((item) => (
-                <a key={item.name} href={item.href} className="font-semibold text-gray-900 hover:text-gray-900">
-                  {item.name}
-                </a>
+                <>
+                {item.component}
+               
+                </>
               ))}
             </div>
             
@@ -73,16 +101,7 @@ export default function Example() {
           <Dialog as="div" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
             <Dialog.Panel className="fixed inset-0 z-10 overflow-y-auto bg-white px-6 py-6 lg:hidden">
               <div className="flex h-9 items-center justify-between">
-                <div className="flex">
-                  <a href="#" className="-m-1.5 p-1.5">
-                    <span className="sr-only">Your Company</span>
-                    <img
-                      className="h-8"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                      alt=""
-                    />
-                  </a>
-                </div>
+                <div className="flex"></div>
                 <div className="flex">
                   <button
                     type="button"
@@ -96,15 +115,11 @@ export default function Example() {
               </div>
               <div className="mt-6 flow-root">
                 <div className="-my-6 divide-y divide-gray-500/10">
-                  <div className="space-y-2 py-6">
+                  <div className="space-y-2 py-6 block">
                     {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
-                      >
-                        {item.name}
-                      </a>
+                       <div className='block' key={`item-${item.name}`}>
+                       {item.component}
+                       </div>
                     ))}
                   </div>
                  
@@ -130,30 +145,25 @@ export default function Example() {
                 </div>
               </div>
               <div>
-                <h1 className="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">
+                <h1 className="text-4xl text-indigo-900 font-bold tracking-tight sm:text-center sm:text-6xl">
                   Prevent sharing privacy violations. 
                 </h1>
                 <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
-                  1 in 20 open datasets contain privacy violations.
+                  <a href="#">1 in 20 open datasets contain privacy violations.</a>
                 </p>
                 <div className="mt-8 flex gap-x-4 sm:justify-center">
                   <button
                     className="inline-block rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
+                    onClick={() => {
+                      try {
+                        button()
+                      } catch (e) {
+                        console.log(e)
+                      }
+                    }} 
                   >
-                    Check your data
-                    {/* <span className="text-indigo-200" aria-hidden="true">
-                      &rarr;
-                    </span> */}
+                    Check a CSV
                   </button>
-                  {/* <a
-                    href="#"
-                    className="inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
-                  >
-                    Live demo
-                    <span className="text-gray-400" aria-hidden="true">
-                      &rarr;
-                    </span>
-                  </a> */}
                 </div>
               </div>
               <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
@@ -177,8 +187,8 @@ export default function Example() {
                       y2="474.645"
                       gradientUnits="userSpaceOnUse"
                     >
-                      <stop stopColor="#9089FC" />
-                      <stop offset={1} stopColor="#FF80B5" />
+                      <stop stopColor="#b38130" />
+                      <stop offset={1} stopColor="#574cfa" />
                     </linearGradient>
                   </defs>
                 </svg>
