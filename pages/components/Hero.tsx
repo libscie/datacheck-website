@@ -444,15 +444,6 @@ export default function Example() {
                   </button>
                   {toScan && (
                     <ResultsModal
-                      icon={
-                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                          <ExclamationTriangleIcon
-                            className="h-6 w-6 text-green-600"
-                            aria-hidden="true"
-                          />
-                        </div>
-                      }
-                      title="Usage disclaimer"
                       results={results}
                       anyViolations={anyViolations}
                       filename={filename}

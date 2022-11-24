@@ -1,21 +1,16 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { KeyObject } from "tls";
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
 
 export default function Modal({
-  icon,
-  title,
   results,
   anyViolations,
   filename,
   cells,
 }: {
-  icon?: React.ReactElement;
-  title: String;
   results: any;
   anyViolations: boolean;
   filename: String;
