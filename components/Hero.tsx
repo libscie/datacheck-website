@@ -30,7 +30,7 @@ import {
   iban,
   creditcard,
   mturk,
-} from "../../utils/dictionary";
+} from "../utils/dictionary";
 
 const navigation = [
   {

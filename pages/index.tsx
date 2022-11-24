@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import Hero from "./components/Hero";
-import LogoCloud from "./components/LogoCloud";
+import Hero from "../components/Hero";
+import LogoCloud from "../components/LogoCloud";
 
 export default function Home() {
   return (

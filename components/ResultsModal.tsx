@@ -5,13 +5,42 @@ import {
   ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
 
+interface Technical {
+  email: boolean;
+  ipv4: boolean;
+  ipv6: boolean;
+  macAddress: boolean;
+  phoneNr: boolean;
+  browserUA: boolean;
+}
+
+interface Geographical {
+  latitudeLongitude: boolean;
+}
+
+interface Direct {
+  gender: boolean;
+  birthday: boolean;
+  bloodType: boolean;
+  ssn: boolean;
+  iban: boolean;
+  creditcard: boolean;
+  mturk: boolean;
+}
+
+interface Results {
+  technical: Technical;
+  geographical: Geographical;
+  direct: Direct;
+}
+
 export default function Modal({
   results,
   anyViolations,
   filename,
   cells,
 }: {
-  results: any;
+  results: Results;
   anyViolations: boolean;
   filename: String;
   cells: Number;
