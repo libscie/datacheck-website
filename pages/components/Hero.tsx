@@ -15,6 +15,22 @@ import SafariLogo from "./SafariLogo";
 import ResultsModal from "./ResultsModal";
 import Faq from "./Faq";
 import GithubLogo from "./GithubLogo";
+import {
+  email,
+  ipv4,
+  ipv6,
+  macAddress,
+  phoneNr,
+  browserUA,
+  latitudeLongitude,
+  gender,
+  ssn,
+  birthday,
+  bloodType,
+  iban,
+  creditcard,
+  mturk,
+} from "../dictionary";
 
 const navigation = [
   {
@@ -27,7 +43,7 @@ const navigation = [
           <>
             <div className="my-2">
               <h2>Research</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <a
                   href="https://metaresearch.nl"
                   target="_blank"
@@ -44,7 +60,7 @@ const navigation = [
             </div>
             <div className="my-2">
               <h2>Funding</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 Open Science Fund grant from the Dutch Research Council{" "}
                 <a
                   href="https://www.nwo.nl/en/projects/203001155"
@@ -57,7 +73,7 @@ const navigation = [
             </div>
             <div className="my-2">
               <h2>Engineering</h2>
-              <span className="text-sm text-gray-500">
+              <span className="text-base text-gray-500">
                 <p>Open source software engineered and hosted by:</p>
                 <a href="https://libscie.org" target="_blank" rel="noreferrer">
                   <ul className="ml-2 my-2">
@@ -87,20 +103,31 @@ const navigation = [
       <About
         name="Disclaimer"
         icon={
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-yellow-100">
             <ExclamationTriangleIcon
-              className="h-6 w-6 text-green-600"
+              className="h-6 w-6 text-yellow-600"
               aria-hidden="true"
             />
           </div>
         }
         content={
-          <p className="text-sm text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
-            amet labore.
-          </p>
+          <>
+            <p className="text-base text-gray-500 my-2">
+              This website is to be used at your own risk. The service is
+              provided as is and does not pretend to provide legal advice.
+            </p>
+            <p className="text-base text-gray-500 my-2">
+              When you get a warning about identifying information in the
+              scanned data, it is an indication to double check your dataset
+              before you decide to publicly share it.
+            </p>
+            <p className="text-base text-gray-500 my-2">
+              If you get no warnings, we do not guarantee there are no privacy
+              risks in sharing the data.
+            </p>
+          </>
         }
-        title="Usage disclaimer"
+        title="Disclaimer"
       />
     ),
   },
@@ -110,19 +137,43 @@ const navigation = [
       <About
         name="R Package"
         icon={
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100">
             <ArchiveBoxIcon
-              className="h-6 w-6 text-green-600"
+              className="h-6 w-6 text-indigo-600"
               aria-hidden="true"
             />
           </div>
         }
         title="Need to do more scanning?"
         content={
-          <p className="text-sm text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
-            amet labore.
-          </p>
+          <>
+            <p className="text-base text-gray-500 my-2">
+              We provide an R package if you want to scan more files at the same
+              time. It is called <code>datacheck</code>. You can use it as
+              follows:
+            </p>
+            <p>
+              <code className="text-base text-gray-500 my-2 mx-4">
+                devtools::install_github(&quot;libscie/datacheck&quot;)
+              </code>
+            </p>
+            <p>
+              <code className="text-base text-gray-500 my-2 mx-4">
+                datacheck::datacheckFolder(path)
+              </code>
+            </p>
+            <p className="text-base text-gray-500 my-2">
+              <a
+                href="https://libscie.github.io/datacheck/index.html"
+                className="underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                View the documentation website
+              </a>{" "}
+              for more information.
+            </p>
+          </>
         }
       />
     ),
@@ -135,7 +186,15 @@ const navigation = [
   },
 ];
 
-async function button() {
+async function button({
+  setState,
+  setFilename,
+  setCellCount,
+}: {
+  setState: Function;
+  setFilename: Function;
+  setCellCount: Function;
+}) {
   try {
     let [fileHandle] = await window.showOpenFilePicker({
       types: [
@@ -150,16 +209,58 @@ async function button() {
       multiple: false,
     });
     let fileData = await fileHandle.getFile();
+
+    setFilename(fileData.name);
     let text = await fileData.text();
-    return text;
+    text = text.replace(/'/g, "");
+    text = text.replace(/"/g, "");
+
+    text = text.replace(/[\r\n]/, ",");
+    let arrayCells = text.split(/[\r\n,]/);
+    arrayCells = arrayCells.filter((x: string) => x != "");
+
+    let result = {
+      technical: {
+        email: arrayCells.some((cell: string) => email.test(cell)),
+        ipv4: arrayCells.some((cell: string) => ipv4.test(cell)),
+        ipv6: arrayCells.some((cell: string) => ipv6.test(cell)),
+        macAddress: arrayCells.some((cell: string) => macAddress.test(cell)),
+        phoneNr: arrayCells.some((cell: string) => phoneNr.test(cell)),
+        browserUA: arrayCells.some((cell: string) => browserUA.test(cell)),
+      },
+      geographical: {
+        latitudeLongitude: arrayCells.some((cell: string) =>
+          latitudeLongitude.test(cell)
+        ),
+      },
+      direct: {
+        gender: arrayCells.some((cell: string) => gender.test(cell)),
+        birthday: arrayCells.some((cell: string) => birthday.test(cell)),
+        ssn: arrayCells.some((cell: string) => ssn.test(cell)),
+        bloodType: arrayCells.some((cell: string) => bloodType.test(cell)),
+        creditcard: arrayCells.some((cell: string) => creditcard.test(cell)),
+        iban: arrayCells.some((cell: string) => iban.test(cell)),
+        mturk: arrayCells.some((cell: string) => mturk.test(cell)),
+      },
+    };
+
+    setCellCount(arrayCells.length);
+    setState(
+      [
+        ...Object.values(result.technical),
+        ...Object.values(result.geographical),
+        ...Object.values(result.direct),
+      ].includes(true)
+    );
+    return result;
   } catch (e) {
-    console.log(e);
+    throw "Action cancelled";
   }
 }
 
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [toScan, setToScan] = useState(undefined);
+  const [toScan, setToScan] = useState(false);
   const [UA, setUA] = useState("");
   const [results, setResults] = useState({
     technical: {
@@ -168,6 +269,7 @@ export default function Example() {
       ipv6: false,
       macAddress: false,
       phoneNr: false,
+      browserUA: false,
     },
     geographical: {
       latitudeLongitude: false,
@@ -176,16 +278,21 @@ export default function Example() {
       gender: false,
       birthday: false,
       ssn: false,
+      bloodType: false,
       creditcard: false,
       iban: false,
       mturk: false,
     },
   });
+  const [anyViolations, setAnyViolations] = useState(false);
+  const [filename, setFilename] = useState("");
+  const [cellCount, setCellCount] = useState(0);
 
   const regex = new RegExp("Chrome|Edge");
 
   useEffect(() => {
     setUA(window.navigator.userAgent.toString());
+    // console.log(gender.test("nonbinary"))
   }, []);
 
   return (
@@ -292,7 +399,7 @@ export default function Example() {
           <div className="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
             <div>
               <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-                <div className="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+                <div className="relative overflow-hidden rounded-full py-1.5 px-4 text-base leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                   <span className="text-gray-600">
                     Join our launch on November 28th.{" "}
                     <a
@@ -312,14 +419,24 @@ export default function Example() {
                 <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
                   <a href="#">
                     1 in 20 open datasets contain privacy violations.
-                    {regex.test(UA.toString()) ? "yes" : "no"}
                   </a>
                 </p>
                 <div className="mt-8 flex gap-x-4 sm:justify-center">
                   <button
                     className="inline-block rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700 disabled:opacity-50"
                     onClick={async () => {
-                      setToScan(await button());
+                      try {
+                        setResults(
+                          (await button({
+                            setState: setAnyViolations,
+                            setFilename,
+                            setCellCount,
+                          })) as any
+                        );
+                        setToScan(true);
+                      } catch (e) {
+                        console.log("Person cancelled action.");
+                      }
                     }}
                     disabled={!regex.test(UA.toString())}
                   >
@@ -336,10 +453,14 @@ export default function Example() {
                         </div>
                       }
                       title="Usage disclaimer"
+                      results={results}
+                      anyViolations={anyViolations}
+                      filename={filename}
+                      cells={cellCount}
                     />
                   )}
                 </div>
-                <p className="mt-6 text-sm leading-8 text-gray-600 sm:text-center">
+                <p className="mt-6 text-base leading-8 text-gray-600 sm:text-center">
                   Works on
                   <span className="flex">
                     <span className="flex-grow"></span>
