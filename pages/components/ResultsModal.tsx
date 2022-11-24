@@ -71,15 +71,18 @@ export default function Modal({
                       >
                         Safe to share?
                       </Dialog.Title>
-                      <p className="text-xs italic mb-1 text-gray-600">
-                        {cells} cells scanned for <code>{filename}</code>
-                      </p>
-                      <p className="text-xs italic mb-2 text-gray-600">
-                        Results do not guarantee presence/absence of privacy
-                        violations.
-                      </p>
-
                       <div className="mt-2 text-sm text-gray-500 text-left">
+                        <span className="text-center">
+                          <p className="text-xs italic mb-1 text-gray-600">
+                            <>
+                              {cells} cells scanned for <code>{filename}</code>
+                            </>
+                          </p>
+                          <p className="text-xs italic mb-2 text-gray-600">
+                            Results do not guarantee presence/absence of privacy
+                            violations.
+                          </p>
+                        </span>
                         <div className="grid grid-cols-7 gap-x-4 gap-y-4">
                           <p className="text-center text-xs">
                             {!results.technical.email ? (
