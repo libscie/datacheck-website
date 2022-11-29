@@ -401,7 +401,7 @@ export default function Example() {
               <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                 <div className="relative overflow-hidden rounded-full py-1.5 px-4 text-base leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                   <span className="text-gray-600">
-                    Join our launch on November 28th.{" "}
+                    Watch the project report.{" "}
                     <a
                       href="https://www.youtube.com/watch?v=i5Pa3Sx3n14"
                       className="font-semibold text-indigo-600"
